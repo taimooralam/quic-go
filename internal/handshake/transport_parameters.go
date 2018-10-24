@@ -21,6 +21,8 @@ type TransportParameters struct {
 
 	MaxPacketSize protocol.ByteCount
 
+	OriginalConnectionID protocol.ConnectionID
+
 	MaxUniStreams  uint16 // only used for IETF QUIC
 	MaxBidiStreams uint16 // only used for IETF QUIC
 	MaxStreams     uint32 // only used for gQUIC
@@ -148,6 +150,8 @@ func (p *TransportParameters) unmarshal(data []byte) error {
 				return fmt.Errorf("wrong length for stateless_reset_token: %d (expected 16)", paramLen)
 			}
 			p.StatelessResetToken = data[:16]
+		case originalConnectionIDParameterID:
+			p.OriginalConnectionID = protocol.ConnectionID(data[:paramLen])
 		}
 		data = data[paramLen:]
 	}
@@ -192,6 +196,12 @@ func (p *TransportParameters) marshal(b *bytes.Buffer) {
 		utils.BigEndian.WriteUint16(b, uint16(statelessResetTokenParameterID))
 		utils.BigEndian.WriteUint16(b, uint16(len(p.StatelessResetToken))) // should always be 16 bytes
 		b.Write(p.StatelessResetToken)
+	}
+	// original_connection_id
+	if p.OriginalConnectionID.Len() > 0 {
+		utils.BigEndian.WriteUint16(b, uint16(originalConnectionIDParameterID))
+		utils.BigEndian.WriteUint16(b, uint16(p.OriginalConnectionID.Len()))
+		b.Write(p.OriginalConnectionID.Bytes())
 	}
 }
 

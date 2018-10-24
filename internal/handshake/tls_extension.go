@@ -24,6 +24,7 @@ const (
 	statelessResetTokenParameterID   transportParameterID = 0x6
 	initialMaxUniStreamsParameterID  transportParameterID = 0x8
 	disableMigrationParameterID      transportParameterID = 0x9
+	originalConnectionIDParameterID  transportParameterID = 0xd
 )
 
 type clientHelloTransportParameters struct {

@@ -142,6 +142,7 @@ var _ = Describe("Transport Parameters", func() {
 					initialMaxUniStreamsParameterID:  {0x44, 0x55},
 					idleTimeoutParameterID:           {0x13, 0x37},
 					maxPacketSizeParameterID:         {0x73, 0x31},
+					originalConnectionIDParameterID:  {0xde, 0xca, 0xfb, 0xad, 0x42},
 					disableMigrationParameterID:      {},
 					statelessResetTokenParameterID:   statelessResetToken,
 				}
@@ -158,6 +159,7 @@ var _ = Describe("Transport Parameters", func() {
 				Expect(params.MaxPacketSize).To(Equal(protocol.ByteCount(0x7331)))
 				Expect(params.DisableMigration).To(BeTrue())
 				Expect(params.StatelessResetToken).To(Equal(statelessResetToken))
+				Expect(params.OriginalConnectionID).To(Equal(protocol.ConnectionID{0xde, 0xca, 0xfb, 0xad, 0x42}))
 			})
 
 			It("doesn't allow values below the minimum remote idle timeout", func() {
@@ -240,6 +242,7 @@ var _ = Describe("Transport Parameters", func() {
 					MaxUniStreams:               0x4321,
 					DisableMigration:            true,
 					StatelessResetToken:         bytes.Repeat([]byte{100}, 16),
+					OriginalConnectionID:        protocol.ConnectionID{1, 2, 3, 4, 5, 6, 7},
 				}
 				b := &bytes.Buffer{}
 				params.marshal(b)
@@ -253,6 +256,7 @@ var _ = Describe("Transport Parameters", func() {
 				Expect(p.IdleTimeout).To(Equal(params.IdleTimeout))
 				Expect(p.DisableMigration).To(Equal(params.DisableMigration))
 				Expect(p.StatelessResetToken).To(Equal(params.StatelessResetToken))
+				Expect(p.OriginalConnectionID).To(Equal(params.OriginalConnectionID))
 			})
 		})
 	})
