@@ -3,7 +3,6 @@ version: "{build}"
 os: Windows Server 2012 R2
 
 environment:
-  APPVEYOR_RDP_PASSWORD: mXFUwnoAuD8VjWcofb
   GOPATH: c:\gopath
   CGO_ENABLED: 0
   TIMESCALE_FACTOR: 20
@@ -30,7 +29,6 @@ install:
   - go get -v -t ./...
 
 build_script:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - ginkgo -r -v -randomizeAllSpecs -randomizeSuites -trace -skipPackage benchmark,integrationtests
   - ginkgo -randomizeAllSpecs -randomizeSuites -trace benchmark -- -samples=1
 

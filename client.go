@@ -76,14 +76,17 @@ func DialAddrContext(
 	tlsConf *tls.Config,
 	config *Config,
 ) (Session, error) {
+	fmt.Println("DialAddrContext: Resolve")
 	udpAddr, err := net.ResolveUDPAddr("udp", addr)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("DialAddrContext: Listen")
 	udpConn, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4zero, Port: 0})
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("DialAddrContext: dialContext")
 	return dialContext(ctx, udpConn, udpAddr, addr, tlsConf, config, true)
 }
 
