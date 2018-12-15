@@ -48,6 +48,7 @@ func echoServer() error {
 	return err
 }
 
+
 func clientMain() error {
 	session, err := quic.DialAddr(addr, &tls.Config{InsecureSkipVerify: true}, nil)
 	if err != nil {
